@@ -1,0 +1,84 @@
+{% extends "base.html" %} {% block content %}
+<h1 align="center">{%block header%}Posts{% endblock %}</h1>
+<div id="posts">
+  {% for post in posts %}
+  <div class="card border-dark">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <a href="/posts/{{post.user.username}}">{{post.user.username}}</a>
+      {% if user.id == post.user.id %}
+      <form action="/delete-post/{{post.id}}" method="get">
+        <button type="get" class="btn btn-primary btn-sm">Delete</button>
+      </form>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      <div class="card-text">{{post.text}}</div>
+      <div class="collapse" id="comments-{{post.id}}">
+        <br />
+        <div class="card">
+          <div class="card-body" id="comments-expanded-{{post.id}}">
+            {% for comment in post.comments %}
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <a href="/posts/{{comment.user.username}}"
+                  >{{comment.user.username}}</a
+                >: {{comment.text}}
+              </div>
+              <div>
+                {% if user.id == comment.user.id or user.id == post.user.id %}
+                <form action="/delete-comment/{{comment.id}}" method="get">
+                  <small class="text-muted">{{comment.date_created}}</small>
+                  <button type="get" class="btn btn-primary btn-sm">
+                    Delete
+                  </button>
+                </form>
+                {% else %}
+                <small class="text-muted">{{comment.date_created}}</small>
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <br />
+      <p class="card-text">
+        {% if post.comments|length > 0%}
+        <a data-bs-toggle="collapse" href="#comments-{{post.id}}" role="button"
+          ><button class="btn btn-secondary btn-sm">
+            View {{post.comments|length}} Comments
+          </button></a
+        >
+        {% else %}
+        <small class="text-muted">No comment.</small>
+        {% endif %}
+      </p>
+      <form
+        class="input-group mb-3"
+        method="post"
+        action="/create-comment/{{post.id}}"
+      >
+        <input
+          type="text"
+          id="text"
+          name="text"
+          class="form-control"
+          placeholder="Comment something!"
+        />
+        <button type="submit" class="btn btn-primary">Comment</button>
+      </form>
+    </div>
+    <div class="card-footer text-muted">{{post.date_created}}</div>
+  </div>
+  <br />
+  {% endfor %} {%block footer%}
+  <div align="center">
+    <a href="/create-post"
+      ><button type="button" class="btn btn-primary btn-lg">
+        Create a post!
+      </button></a
+    >
+  </div>
+  {% endblock %}
+</div>
+{% endblock %}
