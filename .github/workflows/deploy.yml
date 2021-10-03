@@ -6,7 +6,7 @@ env:
   EB_PACKAGE_S3_BUCKET_NAME : "ray-forum-app"
   EB_APPLICATION_NAME : "flask-forum-app"
   EB_ENVIRONMENT_NAME : "Flaskforumapp-env"
-  DEPLOY_PACKAGE_NAME : "forum-app-{{ github.sha }}.zip"
+  DEPLOY_PACKAGE_NAME : "forum-app-${{ github.sha }}.zip"
   AWS_REGION_NAME : "eu-west-3"
 
 # Controls when the workflow will run
